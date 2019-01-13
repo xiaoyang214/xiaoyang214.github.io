@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="一个小码农">
 <meta property="og:description" content="guava的学习笔记">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-12T10:28:30.363Z">
+<meta property="og:updated_time" content="2019-01-13T23:48:29.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="guava">
 <meta name="twitter:description" content="guava的学习笔记">
@@ -687,6 +687,257 @@
 <h3 id="ClassToInstanceMap"><a href="#ClassToInstanceMap" class="headerlink" title="ClassToInstanceMap"></a>ClassToInstanceMap</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ClassToInstanceMap&lt;Number&gt; numberDefaults = MutableClassToInstanceMap.create();</span><br><span class="line">numberDefaults.putInstance(Integer.class, Integer.valueOf(<span class="number">0</span>));</span><br></pre></td></tr></table></figure>
 <h3 id="RangeSet"><a href="#RangeSet" class="headerlink" title="RangeSet"></a>RangeSet</h3><p>rangeSet ：一个断开的，不为空的区间范围</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">RangeSet&lt;Integer&gt; rangeSet = TreeRangeSet.create();</span><br><span class="line">rangeSet.add(Range.closed(<span class="number">1</span>, <span class="number">10</span>)); <span class="comment">// &#123;[1, 10]&#125;</span></span><br><span class="line">rangeSet.add(Range.closedOpen(<span class="number">11</span>, <span class="number">15</span>)); <span class="comment">// disconnected range: &#123;[1, 10], [11, 15)&#125;</span></span><br><span class="line">rangeSet.add(Range.closedOpen(<span class="number">15</span>, <span class="number">20</span>)); <span class="comment">// connected range; &#123;[1, 10], [11, 20)&#125;</span></span><br><span class="line">rangeSet.add(Range.openClosed(<span class="number">0</span>, <span class="number">0</span>)); <span class="comment">// empty range; &#123;[1, 10], [11, 20)&#125;</span></span><br><span class="line">rangeSet.remove(Range.open(<span class="number">5</span>, <span class="number">10</span>)); <span class="comment">// splits [1, 10]; &#123;[1, 5], [10, 10], [11, 20)&#125;</span></span><br></pre></td></tr></table></figure>
+<p>asRanges() 将 <code>RangeSet&lt;C&gt;</code> 装换为 <code>Set&lt;Range&lt;C&gt;&gt;</code>, 可以用来遍历</p>
+<p>contains() 判断是否包含指定的元素</p>
+<h3 id="RangeMap"><a href="#RangeMap" class="headerlink" title="RangeMap"></a>RangeMap</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">RangeMap&lt;Integer, String&gt; rangeMap = TreeRangeMap.create();</span><br><span class="line">rangeMap.put(Range.closed(<span class="number">1</span>, <span class="number">10</span>), <span class="string">"foo"</span>); <span class="comment">// &#123;[1, 10] =&gt; "foo"&#125;</span></span><br><span class="line">rangeMap.put(Range.open(<span class="number">3</span>, <span class="number">6</span>), <span class="string">"bar"</span>); <span class="comment">// &#123;[1, 3] =&gt; "foo", (3, 6) =&gt; "bar", [6, 10] =&gt; "foo"&#125;</span></span><br><span class="line">rangeMap.put(Range.open(<span class="number">10</span>, <span class="number">20</span>), <span class="string">"foo"</span>); <span class="comment">// &#123;[1, 3] =&gt; "foo", (3, 6) =&gt; "bar", [6, 10] =&gt; "foo", (10, 20) =&gt; "foo"&#125;</span></span><br><span class="line">rangeMap.remove(Range.closed(<span class="number">5</span>, <span class="number">11</span>)); <span class="comment">// &#123;[1, 3] =&gt; "foo", (3, 5) =&gt; "bar", (11, 20) =&gt; "foo"&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Collection-Utilities"><a href="#Collection-Utilities" class="headerlink" title="Collection Utilities"></a>Collection Utilities</h2><p>提供了一些 jdk Collections 中没有的工具类</p>
+<table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>JDK or Guava?</th>
+<th>Corresponding Guava utility class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Collection</code></td>
+<td>JDK</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Collections2.html" target="_blank" rel="noopener"><code>Collections2</code></a></td>
+</tr>
+<tr>
+<td><code>List</code></td>
+<td>JDK</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Lists.html" target="_blank" rel="noopener"><code>Lists</code></a></td>
+</tr>
+<tr>
+<td><code>Set</code></td>
+<td>JDK</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Sets.html" target="_blank" rel="noopener"><code>Sets</code></a></td>
+</tr>
+<tr>
+<td><code>SortedSet</code></td>
+<td>JDK</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Sets.html" target="_blank" rel="noopener"><code>Sets</code></a></td>
+</tr>
+<tr>
+<td><code>Map</code></td>
+<td>JDK</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Maps.html" target="_blank" rel="noopener"><code>Maps</code></a></td>
+</tr>
+<tr>
+<td><code>SortedMap</code></td>
+<td>JDK</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Maps.html" target="_blank" rel="noopener"><code>Maps</code></a></td>
+</tr>
+<tr>
+<td><code>Queue</code></td>
+<td>JDK</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Queues.html" target="_blank" rel="noopener"><code>Queues</code></a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/google/guava/wiki/NewCollectionTypesExplained#Multiset" target="_blank" rel="noopener"><code>Multiset</code></a></td>
+<td>Guava</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Multisets.html" target="_blank" rel="noopener"><code>Multisets</code></a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/google/guava/wiki/NewCollectionTypesExplained#Multimap" target="_blank" rel="noopener"><code>Multimap</code></a></td>
+<td>Guava</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Multimaps.html" target="_blank" rel="noopener"><code>Multimaps</code></a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/google/guava/wiki/NewCollectionTypesExplained#BiMap" target="_blank" rel="noopener"><code>BiMap</code></a></td>
+<td>Guava</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Maps.html" target="_blank" rel="noopener"><code>Maps</code></a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/google/guava/wiki/NewCollectionTypesExplained#Table" target="_blank" rel="noopener"><code>Table</code></a></td>
+<td>Guava</td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Tables.html" target="_blank" rel="noopener"><code>Tables</code></a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="静态构造"><a href="#静态构造" class="headerlink" title="静态构造"></a>静态构造</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">List&lt;TypeThatsTooLongForItsOwnGood&gt; list = <span class="keyword">new</span> ArrayList&lt;TypeThatsTooLongForItsOwnGood&gt;();</span><br><span class="line"></span><br><span class="line">List&lt;TypeThatsTooLongForItsOwnGood&gt; list = Lists.newArrayList();</span><br><span class="line">Map&lt;KeyType, LongishValueType&gt; map = Maps.newLinkedHashMap();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从已有的数组中复制</span></span><br><span class="line">Set&lt;Type&gt; copySet = Sets.newHashSet(elements);</span><br><span class="line">List&lt;String&gt; theseElements = Lists.newArrayList(<span class="string">"alpha"</span>, <span class="string">"beta"</span>, <span class="string">"gamma"</span>);</span><br><span class="line"></span><br><span class="line">List&lt;Type&gt; exactly100 = Lists.newArrayListWithCapacity(<span class="number">100</span>);</span><br><span class="line">List&lt;Type&gt; approx100 = Lists.newArrayListWithExpectedSize(<span class="number">100</span>);</span><br><span class="line">Set&lt;Type&gt; approx100Set = Sets.newHashSetWithExpectedSize(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在guava中，提供的新的集合也没有提供构造函数的方式创建，提供了静态方法创建</span></span><br><span class="line">Multiset&lt;String&gt; multiset = HashMultiset.create();</span><br></pre></td></tr></table></figure>
+<h3 id="Iterables"><a href="#Iterables" class="headerlink" title="Iterables"></a>Iterables</h3><blockquote>
+<p>Whenever possible, Guava prefers to provide utilities accepting an <code>Iterable</code> rather than a <code>Collection</code>. Here at Google, it’s not out of the ordinary to encounter a “collection” that isn’t actually stored in main memory, but is being gathered from a database, or from another data center, and can’t support operations like <code>size()</code> without actually grabbing all of the elements.</p>
+<p>只要有可能，Guava更愿意提供接受Iterable而不是Collection的实用程序。 在谷歌，遇到一个实际上没有存储在主存储器中的“集合”，但是来自数据库，或来自其他数据中心，并且不能支持size（）等操作并不是不寻常的。 没有实际获取所有元素。</p>
+</blockquote>
+<p>Iterables中，大多数的操作都是惰性的，只有在需要的时候才会进行迭代，本身返回 Iterables 的方法返回的只一个延迟计算的视图，并不是在内存中显示的构造集合。</p>
+<h4 id="常用的方法"><a href="#常用的方法" class="headerlink" title="常用的方法"></a>常用的方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Iterable&lt;Integer&gt; concatenated = Iterables.concat(</span><br><span class="line">  Ints.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>),</span><br><span class="line">  Ints.asList(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>));</span><br><span class="line"><span class="comment">// concatenated has elements 1, 2, 3, 4, 5, 6</span></span><br><span class="line"></span><br><span class="line">String lastAdded = Iterables.getLast(myLinkedHashSet);</span><br><span class="line"></span><br><span class="line">String theElement = Iterables.getOnlyElement(thisSetIsDefinitelyASingleton);</span><br><span class="line">  <span class="comment">// if this set isn't a singleton, something is wrong!</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 连接两个集合</span></span><br><span class="line">Iterable&lt;Integer&gt; concatenated = Iterables.concat(</span><br><span class="line">        Ints.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>),</span><br><span class="line">        Ints.asList(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>));</span><br><span class="line"><span class="comment">// 找出集合中的重复元素个数</span></span><br><span class="line">System.out.println(Iterables.frequency(concatenated, <span class="number">2</span>));</span><br><span class="line"><span class="comment">// 按指定个数分组</span></span><br><span class="line">Iterables.partition(concatenated, <span class="number">3</span>).forEach(System.out::print);</span><br><span class="line"><span class="comment">// 获取第一个，如果为null，返回默认值</span></span><br><span class="line">System.out.println(Iterables.getFirst(concatenated, <span class="number">0</span>));</span><br><span class="line"><span class="comment">// 获取集合中前n个</span></span><br><span class="line">System.out.println(Iterables.limit(concatenated, <span class="number">3</span>));</span><br></pre></td></tr></table></figure>
+<h4 id="和Collection类似的方法"><a href="#和Collection类似的方法" class="headerlink" title="和Collection类似的方法"></a>和Collection类似的方法</h4><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Analogous <code>Collection</code> method</th>
+<th><code>FluentIterable</code> equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Iterables.html#addAll-java.util.Collection-java.lang.Iterable-" target="_blank" rel="noopener"><code>addAll(Collection addTo, Iterable toAdd)</code></a></td>
+<td><code>Collection.addAll(Collection)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Iterables.html#contains-java.lang.Iterable-java.lang.Object-" target="_blank" rel="noopener"><code>contains(Iterable, Object)</code></a></td>
+<td><code>Collection.contains(Object)</code></td>
+<td><a href="http://google.github.io/guava/releases/12.0/api/docs/com/google/common/collect/FluentIterable.html#contains-java.lang.Object-" target="_blank" rel="noopener"><code>FluentIterable.contains(Object)</code></a></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Iterables.html#removeAll-java.lang.Iterable-java.util.Collection-" target="_blank" rel="noopener"><code>removeAll(Iterable removeFrom, Collection toRemove)</code></a></td>
+<td><code>Collection.removeAll(Collection)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Iterables.html#retainAll-java.lang.Iterable-java.util.Collection-" target="_blank" rel="noopener"><code>retainAll(Iterable removeFrom, Collection toRetain)</code></a></td>
+<td><code>Collection.retainAll(Collection)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Iterables.html#size-java.lang.Iterable-" target="_blank" rel="noopener"><code>size(Iterable)</code></a></td>
+<td><code>Collection.size()</code></td>
+<td><a href="http://google.github.io/guava/releases/12.0/api/docs/com/google/common/collect/FluentIterable.html#size--" target="_blank" rel="noopener"><code>FluentIterable.size()</code></a></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Iterables.html#toArray-java.lang.Iterable-java.lang.Class-" target="_blank" rel="noopener"><code>toArray(Iterable, Class)</code></a></td>
+<td><code>Collection.toArray(T[])</code></td>
+<td><a href="http://google.github.io/guava/releases/12.0/api/docs/com/google/common/collect/FluentIterable.html#toArray-java.lang.Class-" target="_blank" rel="noopener"><code>FluentIterable.toArray(Class)</code></a></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Iterables.html#isEmpty-java.lang.Iterable-" target="_blank" rel="noopener"><code>isEmpty(Iterable)</code></a></td>
+<td><code>Collection.isEmpty()</code></td>
+<td><a href="http://google.github.io/guava/releases/12.0/api/docs/com/google/common/collect/FluentIterable.html#isEmpty--" target="_blank" rel="noopener"><code>FluentIterable.isEmpty()</code></a></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Iterables.html#get-java.lang.Iterable-int-" target="_blank" rel="noopener"><code>get(Iterable, int)</code></a></td>
+<td><code>List.get(int)</code></td>
+<td><a href="http://google.github.io/guava/releases/12.0/api/docs/com/google/common/collect/FluentIterable.html#get-int-" target="_blank" rel="noopener"><code>FluentIterable.get(int)</code></a></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Iterables.html#toString-java.lang.Iterable-" target="_blank" rel="noopener"><code>toString(Iterable)</code></a></td>
+<td><code>Collection.toString()</code></td>
+<td><a href="http://google.github.io/guava/releases/12.0/api/docs/com/google/common/collect/FluentIterable.html#toString--" target="_blank" rel="noopener"><code>FluentIterable.toString()</code></a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Lists"><a href="#Lists" class="headerlink" title="Lists"></a>Lists</h3><p>partition(List list, int size)；</p>
+<p>reverse(List list)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; countUp = Ints.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line">List&lt;Integer&gt; countDown = Lists.reverse(theList); <span class="comment">// &#123;5, 4, 3, 2, 1&#125;</span></span><br><span class="line"></span><br><span class="line">List&lt;List&lt;Integer&gt;&gt; parts = Lists.partition(countUp, <span class="number">2</span>); <span class="comment">// &#123;&#123;1, 2&#125;, &#123;3, 4&#125;, &#123;5&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Sets"><a href="#Sets" class="headerlink" title="Sets"></a>Sets</h3><table>
+<thead>
+<tr>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Sets.html#union-java.util.Set-java.util.Set-" target="_blank" rel="noopener"><code>union(Set, Set)</code></a> 聚合两个set</td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Sets.html#intersection-java.util.Set-java.util.Set-" target="_blank" rel="noopener"><code>intersection(Set, Set)</code></a> 获取两个结合的交集</td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Sets.html#difference-java.util.Set-java.util.Set-" target="_blank" rel="noopener"><code>difference(Set, Set)</code></a> 比较两个集合的不同</td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Sets.html#symmetricDifference-java.util.Set-java.util.Set-" target="_blank" rel="noopener"><code>symmetricDifference(Set, Set)</code></a></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Sets.html#cartesianProduct-java.util.List-" target="_blank" rel="noopener"><code>cartesianProduct(List)</code></a> 获取集合的笛卡尔集</td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Sets.html#powerSet-java.util.Set-" target="_blank" rel="noopener"><code>powerSet(Set)</code></a> 返回集合中所有的子集</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Maps"><a href="#Maps" class="headerlink" title="Maps"></a>Maps</h3><p><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Maps.html#difference-java.util.Map-java.util.Map-" target="_blank" rel="noopener"><code>Maps.difference(Map, Map)</code></a>  返回两个map的不同</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Integer&gt; left = ImmutableMap.of(<span class="string">"a"</span>, <span class="number">1</span>, <span class="string">"b"</span>, <span class="number">2</span>, <span class="string">"c"</span>, <span class="number">3</span>);</span><br><span class="line">Map&lt;String, Integer&gt; right = ImmutableMap.of(<span class="string">"b"</span>, <span class="number">2</span>, <span class="string">"c"</span>, <span class="number">4</span>, <span class="string">"d"</span>, <span class="number">5</span>);</span><br><span class="line">MapDifference&lt;String, Integer&gt; diff = Maps.difference(left, right);</span><br><span class="line"></span><br><span class="line">diff.entriesInCommon(); <span class="comment">// &#123;"b" =&gt; 2&#125;</span></span><br><span class="line">diff.entriesDiffering(); <span class="comment">// &#123;"c" =&gt; (3, 4)&#125;</span></span><br><span class="line">diff.entriesOnlyOnLeft(); <span class="comment">// &#123;"a" =&gt; 1&#125;</span></span><br><span class="line">diff.entriesOnlyOnRight(); <span class="comment">// &#123;"d" =&gt; 5&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Tables"><a href="#Tables" class="headerlink" title="Tables"></a>Tables</h3><p><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/collect/Tables.html#transpose-com.google.common.collect.Table-" target="_blank" rel="noopener"><code>transpose(Table)</code></a>  <code>Table&lt;R, C, V&gt;</code> –&gt; <code>Table&lt;C, R, V&gt;</code></p>
+<h2 id="Collection-helper"><a href="#Collection-helper" class="headerlink" title="Collection helper"></a>Collection helper</h2><h3 id="PeekingIterator"><a href="#PeekingIterator" class="headerlink" title="PeekingIterator"></a>PeekingIterator</h3><p>Iterator只能遍历一次，peeking可以让iterable在一次使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List&lt;E&gt; result = Lists.newArrayList();</span><br><span class="line">PeekingIterator&lt;E&gt; iter = Iterators.peekingIterator(source.iterator());</span><br><span class="line"><span class="keyword">while</span> (iter.hasNext()) &#123;</span><br><span class="line">  E current = iter.next();</span><br><span class="line">  <span class="keyword">while</span> (iter.hasNext() &amp;&amp; iter.peek().equals(current)) &#123;</span><br><span class="line">    <span class="comment">// skip this duplicate element</span></span><br><span class="line">    iter.next();</span><br><span class="line">  &#125;</span><br><span class="line">  result.add(current);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="abstractIterator"><a href="#abstractIterator" class="headerlink" title="abstractIterator"></a>abstractIterator</h3><p>abstractIterator 可以快速实现自己的 iterator ，只需要实现一个方法 computeNext(),  用来计算 next 值，如果已经结束了，可以返回 endOfData() 来标记迭代结束。</p>
+<p>如果要执行 remove 的方法，就不能继承 AbstractIterator 了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回一个非空的 Iterator</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Iterator&lt;String&gt; <span class="title">skipNulls</span><span class="params">(<span class="keyword">final</span> Iterator&lt;String&gt; in)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> AbstractIterator&lt;String&gt;() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">computeNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">while</span> (in.hasNext()) &#123;</span><br><span class="line">        String s = in.next();</span><br><span class="line">        <span class="keyword">if</span> (s != <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span> s;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> endOfData();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="字符串处理-Strings"><a href="#字符串处理-Strings" class="headerlink" title="字符串处理 Strings"></a>字符串处理 Strings</h2><h3 id="Joiner"><a href="#Joiner" class="headerlink" title="Joiner"></a>Joiner</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Joiner joiner = Joiner.on(<span class="string">"; "</span>).skipNulls();</span><br><span class="line"><span class="keyword">return</span> joiner.join(<span class="string">"Harry"</span>, <span class="keyword">null</span>, <span class="string">"Ron"</span>, <span class="string">"Hermione"</span>);</span><br></pre></td></tr></table></figure>
+<p>Joiner是线程安全的，每次配置之后，返回的都是一个新的实例，所以可以用 static final 来修饰</p>
+<h3 id="Splitter"><a href="#Splitter" class="headerlink" title="Splitter"></a>Splitter</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Splitter.on(<span class="string">','</span>)</span><br><span class="line">    .trimResults()</span><br><span class="line">    .omitEmptyStrings()</span><br><span class="line">    .split(<span class="string">"foo,bar,,   qux"</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Splitter.on();</span><br><span class="line">Splitter.fixedLength();</span><br><span class="line">omitEmptyStrings(); <span class="comment">// 丢弃空字符串</span></span><br><span class="line">trimResults(); <span class="comment">// 去掉分割后的前后空格</span></span><br><span class="line">trimResults(CharMatcher matcher);</span><br><span class="line">limit(<span class="keyword">int</span> size); <span class="comment">// 超过size之后就不进行分割了</span></span><br></pre></td></tr></table></figure>
+<h4 id="MapSplitter"><a href="#MapSplitter" class="headerlink" title="MapSplitter"></a>MapSplitter</h4><p><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/base/Splitter.html#withKeyValueSeparator-java.lang.String-" target="_blank" rel="noopener"><code>withKeyValueSeparator()</code></a></p>
+<h3 id="Charsets"><a href="#Charsets" class="headerlink" title="Charsets"></a>Charsets</h3><p>Charsets.UTF_8</p>
+<h3 id="CaseFormat"><a href="#CaseFormat" class="headerlink" title="CaseFormat"></a>CaseFormat</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, <span class="string">"CONSTANT_NAME"</span>); <span class="comment">// returns "constantName"</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/base/CaseFormat.html#LOWER_CAMEL" target="_blank" rel="noopener"><code>LOWER_CAMEL</code></a></td>
+<td><code>lowerCamel</code></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/base/CaseFormat.html#LOWER_HYPHEN" target="_blank" rel="noopener"><code>LOWER_HYPHEN</code></a></td>
+<td><code>lower-hyphen</code></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/base/CaseFormat.html#LOWER_UNDERSCORE" target="_blank" rel="noopener"><code>LOWER_UNDERSCORE</code></a></td>
+<td><code>lower_underscore</code></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/base/CaseFormat.html#UPPER_CAMEL" target="_blank" rel="noopener"><code>UPPER_CAMEL</code></a></td>
+<td><code>UpperCamel</code></td>
+</tr>
+<tr>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/base/CaseFormat.html#UPPER_UNDERSCORE" target="_blank" rel="noopener"><code>UPPER_UNDERSCORE</code></a></td>
+<td><code>UPPER_UNDERSCORE</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="原始类型工具类"><a href="#原始类型工具类" class="headerlink" title="原始类型工具类"></a>原始类型工具类</h2><table>
+<thead>
+<tr>
+<th>Primitive Type</th>
+<th>Guava Utilities (all in <code>com.google.common.primitives</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>byte</code></td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/Bytes.html" target="_blank" rel="noopener"><code>Bytes</code></a>, <a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/SignedBytes.html" target="_blank" rel="noopener"><code>SignedBytes</code></a>, <a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/UnsignedBytes.html" target="_blank" rel="noopener"><code>UnsignedBytes</code></a></td>
+</tr>
+<tr>
+<td><code>short</code></td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/Shorts.html" target="_blank" rel="noopener"><code>Shorts</code></a></td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/Ints.html" target="_blank" rel="noopener"><code>Ints</code></a>, <a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/UnsignedInteger.html" target="_blank" rel="noopener"><code>UnsignedInteger</code></a>, <a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/UnsignedInts.html" target="_blank" rel="noopener"><code>UnsignedInts</code></a></td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/Longs.html" target="_blank" rel="noopener"><code>Longs</code></a>, <a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/UnsignedLong.html" target="_blank" rel="noopener"><code>UnsignedLong</code></a>, <a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/UnsignedLongs.html" target="_blank" rel="noopener"><code>UnsignedLongs</code></a></td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/Floats.html" target="_blank" rel="noopener"><code>Floats</code></a></td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/Doubles.html" target="_blank" rel="noopener"><code>Doubles</code></a></td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/Chars.html" target="_blank" rel="noopener"><code>Chars</code></a></td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td><a href="http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/primitives/Booleans.html" target="_blank" rel="noopener"><code>Booleans</code></a></td>
+</tr>
+</tbody>
+</table>
 
       
     </div>
@@ -865,7 +1116,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本的操作"><span class="nav-number">1.</span> <span class="nav-text">基本的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#guava对null的处理"><span class="nav-number">1.1.</span> <span class="nav-text">guava对null的处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Optional"><span class="nav-number">1.1.1.</span> <span class="nav-text">Optional</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MoreObjects-amp-Strings"><span class="nav-number">1.1.2.</span> <span class="nav-text">MoreObjects&amp;Strings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Preconditions"><span class="nav-number">1.1.3.</span> <span class="nav-text">Preconditions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-常用的方法"><span class="nav-number">1.2.</span> <span class="nav-text">Object 常用的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ordering"><span class="nav-number">1.3.</span> <span class="nav-text">Ordering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Ordering"><span class="nav-number">1.3.1.</span> <span class="nav-text">创建Ordering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">1.3.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Throwables"><span class="nav-number">1.4.</span> <span class="nav-text">Throwables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Propagation"><span class="nav-number">1.4.1.</span> <span class="nav-text">Propagation</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集合类"><span class="nav-number">2.</span> <span class="nav-text">集合类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Immutable-Collections"><span class="nav-number">2.1.</span> <span class="nav-text">Immutable Collections</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#New-Collection-Types"><span class="nav-number">2.2.</span> <span class="nav-text">New Collection Types</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MultiSit"><span class="nav-number">2.2.1.</span> <span class="nav-text">MultiSit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multimap"><span class="nav-number">2.2.2.</span> <span class="nav-text">Multimap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">构造</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编辑"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">编辑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">查看</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BiMap"><span class="nav-number">2.2.3.</span> <span class="nav-text">BiMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Table"><span class="nav-number">2.2.4.</span> <span class="nav-text">Table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassToInstanceMap"><span class="nav-number">2.2.5.</span> <span class="nav-text">ClassToInstanceMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RangeSet"><span class="nav-number">2.2.6.</span> <span class="nav-text">RangeSet</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本的操作"><span class="nav-number">1.</span> <span class="nav-text">基本的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#guava对null的处理"><span class="nav-number">1.1.</span> <span class="nav-text">guava对null的处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Optional"><span class="nav-number">1.1.1.</span> <span class="nav-text">Optional</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MoreObjects-amp-Strings"><span class="nav-number">1.1.2.</span> <span class="nav-text">MoreObjects&amp;Strings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Preconditions"><span class="nav-number">1.1.3.</span> <span class="nav-text">Preconditions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-常用的方法"><span class="nav-number">1.2.</span> <span class="nav-text">Object 常用的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ordering"><span class="nav-number">1.3.</span> <span class="nav-text">Ordering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Ordering"><span class="nav-number">1.3.1.</span> <span class="nav-text">创建Ordering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">1.3.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Throwables"><span class="nav-number">1.4.</span> <span class="nav-text">Throwables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Propagation"><span class="nav-number">1.4.1.</span> <span class="nav-text">Propagation</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集合类"><span class="nav-number">2.</span> <span class="nav-text">集合类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Immutable-Collections"><span class="nav-number">2.1.</span> <span class="nav-text">Immutable Collections</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#New-Collection-Types"><span class="nav-number">2.2.</span> <span class="nav-text">New Collection Types</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MultiSit"><span class="nav-number">2.2.1.</span> <span class="nav-text">MultiSit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multimap"><span class="nav-number">2.2.2.</span> <span class="nav-text">Multimap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">构造</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编辑"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">编辑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">查看</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BiMap"><span class="nav-number">2.2.3.</span> <span class="nav-text">BiMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Table"><span class="nav-number">2.2.4.</span> <span class="nav-text">Table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassToInstanceMap"><span class="nav-number">2.2.5.</span> <span class="nav-text">ClassToInstanceMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RangeSet"><span class="nav-number">2.2.6.</span> <span class="nav-text">RangeSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RangeMap"><span class="nav-number">2.2.7.</span> <span class="nav-text">RangeMap</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collection-Utilities"><span class="nav-number">2.3.</span> <span class="nav-text">Collection Utilities</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态构造"><span class="nav-number">2.3.1.</span> <span class="nav-text">静态构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Iterables"><span class="nav-number">2.3.2.</span> <span class="nav-text">Iterables</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用的方法"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">常用的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#和Collection类似的方法"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">和Collection类似的方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lists"><span class="nav-number">2.3.3.</span> <span class="nav-text">Lists</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sets"><span class="nav-number">2.3.4.</span> <span class="nav-text">Sets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maps"><span class="nav-number">2.3.5.</span> <span class="nav-text">Maps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tables"><span class="nav-number">2.3.6.</span> <span class="nav-text">Tables</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collection-helper"><span class="nav-number">2.4.</span> <span class="nav-text">Collection helper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PeekingIterator"><span class="nav-number">2.4.1.</span> <span class="nav-text">PeekingIterator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#abstractIterator"><span class="nav-number">2.4.2.</span> <span class="nav-text">abstractIterator</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串处理-Strings"><span class="nav-number">2.5.</span> <span class="nav-text">字符串处理 Strings</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Joiner"><span class="nav-number">2.5.1.</span> <span class="nav-text">Joiner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Splitter"><span class="nav-number">2.5.2.</span> <span class="nav-text">Splitter</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MapSplitter"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">MapSplitter</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Charsets"><span class="nav-number">2.5.3.</span> <span class="nav-text">Charsets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CaseFormat"><span class="nav-number">2.5.4.</span> <span class="nav-text">CaseFormat</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原始类型工具类"><span class="nav-number">2.6.</span> <span class="nav-text">原始类型工具类</span></a></li></ol></li></ol></div>
             
 
           </div>
